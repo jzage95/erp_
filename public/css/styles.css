@@ -1,0 +1,274 @@
+/* General */
+* {
+    font-family: 'Roboto';
+    font-weight: 550;
+    font-size: 12px;
+}
+
+body {
+    min-height: 100vh;
+    padding-bottom: 100px;
+    position: relative;
+}
+
+header {
+    background-color: #fff;
+    border-bottom: 1px solid #00283683;
+}
+
+.row {
+    margin: 0;
+}
+
+.container-fluid {
+    padding: 0;
+}
+
+.btn-primary {
+    background-color: #49ADD1 !important;
+    border: 2px solid rgba(17, 188, 236, 0.83) !important;
+}
+
+.btn-primary:hover {
+    background-color: #002836 !important;
+    border-color: #002836 !important;
+}
+
+.btn {
+    padding: 10px 20px;
+}
+
+/*.btn-close {
+    float: right;
+    font-size: 1rem; 
+    font-weight: 500;
+    line-height: 1;
+    color: #002836;
+    text-shadow: 0 1px 0 #002836;
+    opacity: .5;
+}*/
+
+
+.msg {
+    background-color: #D4EDDA;
+    color: #155724;
+    border: 1px solid #C3E6CB;
+    width: 100%;
+    margin-bottom: 0;
+    text-align: center;
+    padding: 10px;
+  }
+
+/* NavBar */
+.navbar-brand img {
+    height: 60px; /* Ajuste a altura conforme necessário */
+    width: 58px; /* Mantém a proporção da imagem */
+    display: block;
+    margin-left: 15px;
+    margin-right: auto;
+}
+
+#navbar {
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 8px 50px;
+}
+
+#navbar a {
+    font-size: 14px;
+    color: #002836;
+}
+
+#navbar a:hover {
+    color: #49ADD1;
+}
+
+/* Search Container */
+#search-container {
+    background-image: url("../img/porto_placeholder.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 400px;
+    padding: 50px;
+    text-align: center;
+}
+
+#search-container h1 {
+    color: #002836;
+    margin-bottom: 30px;
+    font-weight: 900;
+}
+
+#search-container form {
+    width: 50%;
+    margin: 0 auto;
+}
+
+/* Events List */
+#events-container {
+    padding: 50px;
+}
+
+#events-container h2 {
+    margin-bottom: 10px;
+}
+
+#events-container .subtitle {
+    color: #002836;
+    margin-bottom: 30px;
+}
+
+#cards-container {
+    display: flex;
+}
+
+#events-container .card {
+    flex: 1 1 24%; 
+    max-width: 20%; 
+    border-radius: 10px;
+    padding: 0;
+    margin: .5%;
+}
+
+#events-container img {
+   max-height: 300px;
+   border-top-left-radius: 10px;
+   border-top-right-radius: 10px;
+}
+
+.card .card-date {
+    font-size: 12px;
+    color: #CCC;
+}
+
+.card .card-title {
+    color: #002836;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.cards-participants {
+    font-size: 14px;
+    color: #757575;
+}
+
+/* Event create page */
+#event-create-container {
+    padding: 20px;
+}
+
+#event-create-container label {
+    font-weight: bold;
+}
+
+#event-create-container input, 
+#event-create-container select, 
+#event-create-container textarea {
+    font-size: 12px;	
+
+}
+
+/* Event page */
+#image-container,
+#info-container {
+  margin-top: 20px;
+  padding-left: 0px;
+}
+
+#image-container img {
+  border-radius: 10px;
+  width: 95%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+#info-container h1 {
+  font-size: 36px;
+  font-weight: 900;
+}
+
+#info-container p {
+  margin: 0;
+  font-size: 14px;
+  display: flex;
+}
+
+#info-container h3,
+#description-container h3 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#info-container ion-icon {
+  font-size: 20px;
+  color: #F2A340;
+  margin-right: 5px;
+}
+
+#info-container #event-submit {
+  margin: 20px 0;
+}
+
+#info-container h1, 
+#info-container p, 
+#info-container a {
+    margin-bottom: 10px; /* Reduz o espaçamento entre os elementos */
+}
+
+#items-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  #items-list li {
+    display: flex;
+  }
+
+/* Estilo para a paginação */
+.page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #002836;
+    border-color: #013345;
+}
+
+.page-link {
+    color: #002836;
+}
+
+.page-link:hover {
+    color: #055471;
+}
+
+.large-icon {
+    size: 150px !important;
+}
+
+.icon-edit {
+    font-size: 15px; 
+    color: #49ADD1;
+    cursor: pointer;     /* Alterar o cursor ao passar sobre o ícone */
+    transition: color 0.3s ease;  /* Efeito de transição ao mudar a cor */
+}
+
+.icon-edit:hover {
+    font-size: 15px; 
+    color: #002836;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    background-color: #002836 ;
+    color: #fff;
+    padding: 15px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+footer p {
+    margin-bottom: 0;
+}
