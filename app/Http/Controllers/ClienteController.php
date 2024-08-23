@@ -59,7 +59,6 @@ class ClienteController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Separar os dados do cliente e o tipo de documento
         $clienteData = $request->only([
             'Cliente',
             'Nome',
@@ -71,47 +70,32 @@ class ClienteController extends Controller
 
         $tipoDoc = $request->input('tipoDoc');
 
-        // Log para depuração
         Log::info('Iniciando a atualização do cliente', [
             'Cliente' => $id,
             'clienteData' => $clienteData,
             'tipoDoc' => $tipoDoc,
         ]);
 
-        // Verifica se o novo valor do campo "Cliente" já existe no banco de dados, mas diferente do ID atual
-        $existe = DB::table('Clientes')
-            ->where('Cliente', $clienteData['Cliente'])
-            ->where('Cliente', '!=', $id)
-            ->exists();
+        $clienteAlterado = false;
+        if ($clienteData['Cliente'] !== $id) {
+            $clienteAlterado = true;
+            // Verifica se o novo valor do campo "Cliente" já existe no banco de dados
+            $existe = DB::table('Clientes')
+                ->where('Cliente', $clienteData['Cliente'])
+                ->exists();
 
-        if ($existe) {
-            Log::error('Erro de duplicidade: Novo valor do campo Cliente já existe', ['Cliente' => $clienteData['Cliente']]);
-            return redirect()->route('clientes.index')->with('error', 'Erro: Valor duplicado no campo Cliente.');
+            if ($existe) {
+                Log::error('Erro de duplicidade: Novo valor do campo Cliente já existe', ['Cliente' => $clienteData['Cliente']]);
+                return redirect()->route('clientes.index')->with('error', 'Erro: Valor duplicado no campo Cliente.');
+            }
         }
 
-        // Converte a data para o fuso horário correto
         $clienteData['DataUltimaActualizacao'] = Carbon::now('Africa/Luanda');
-        $clienteNome = $clienteData['Nome'];
+        
+        // Atualiza o Cliente e a tabela CabecDoc independentemente de o Cliente ter sido alterado
+        $this->clienteUpdateService->updateCliente($id, $clienteData, $tipoDoc, $clienteAlterado);
 
-        // Atualizar os dados do cliente
-        $updated = DB::table('Clientes')->where('Cliente', $id)->update($clienteData);
-
-        if ($updated) {
-            Log::info('Cliente atualizado com sucesso', ['clienteData' => $clienteData]);
-            return redirect()->route('clientes.index')->with('success', 'Cliente <strong>' . $clienteNome . '</strong> atualizado com sucesso.');
-        } else {
-            Log::error('Falha ao atualizar o cliente', ['Cliente' => $id]);
-            return redirect()->route('clientes.index')->with('error', 'Erro ao atualizar o cliente.');
-        }
+        return redirect()->route('clientes.index')->with('success', 'Cliente <strong>' . $clienteData['Nome'] . '</strong> atualizado com sucesso.');
     }
-
-    public function checkCliente(Request $request)
-    {
-        $clienteId = $request->input('cliente');
-        $existe = DB::table('Clientes')->where('Cliente', $clienteId)->exists();
-
-        return response()->json(['exists' => $existe]);
-    }
-
 
 }

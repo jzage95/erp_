@@ -18,6 +18,4 @@ Route::get('/test-connection', function () {
 Route::get('clientes', [ClienteController::class, 'index'])->name('clientes.index');
 Route::get('clientes/{id}/edit', [ClienteController::class, 'edit'])->name('clientes.edit');
 Route::put('clientes/{id}', [ClienteController::class, 'update'])->name('clientes.update');
-Route::post('/clientes/check-cliente', [ClienteController::class, 'checkCliente'])->name('clientes.checkCliente');
-
 
