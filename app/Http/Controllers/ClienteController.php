@@ -40,9 +40,9 @@ class ClienteController extends Controller
         return view('clientes.index', compact('clientes'));
     }
 
-    public function edit($id)
+    public function edit($cliente)
     {
-        $cliente = DB::table('Clientes')->where('Cliente', $id)->first();
+        $cliente = DB::table('Clientes')->where('Cliente', $cliente)->first();
 
         if ($cliente) {
             // Convertendo todos os campos do cliente para UTF-8
@@ -57,8 +57,10 @@ class ClienteController extends Controller
         return response()->json(['error' => 'Cliente não encontrado'], 404);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $cliente)
     {
+        Log::info('Cliente recebido na atualização', ['Cliente' => $cliente]);
+
         $clienteData = $request->only([
             'Cliente',
             'Nome',
@@ -71,13 +73,13 @@ class ClienteController extends Controller
         $tipoDoc = $request->input('tipoDoc');
 
         Log::info('Iniciando a atualização do cliente', [
-            'Cliente' => $id,
+            'Cliente' => $cliente,
             'clienteData' => $clienteData,
             'tipoDoc' => $tipoDoc,
         ]);
 
         $clienteAlterado = false;
-        if ($clienteData['Cliente'] !== $id) {
+        if ($clienteData['Cliente'] !== $cliente) {
             $clienteAlterado = true;
             // Verifica se o novo valor do campo "Cliente" já existe no banco de dados
             $existe = DB::table('Clientes')
@@ -91,11 +93,16 @@ class ClienteController extends Controller
         }
 
         $clienteData['DataUltimaActualizacao'] = Carbon::now('Africa/Luanda');
-        
-        // Atualiza o Cliente e a tabela CabecDoc independentemente de o Cliente ter sido alterado
-        $this->clienteUpdateService->updateCliente($id, $clienteData, $tipoDoc, $clienteAlterado);
+        $clienteNome = $clienteData['Nome'];
 
-        return redirect()->route('clientes.index')->with('success', 'Cliente <strong>' . $clienteData['Nome'] . '</strong> atualizado com sucesso.');
+        // Log para verificar o cliente que está sendo passado
+        Log::info("Chamando updateClienteService com Cliente", ['Cliente' => $cliente, 'clienteAlterado' => $clienteAlterado]);
+
+        // Atualiza o Cliente e a tabela CabecDoc independentemente de o Cliente ter sido alterado
+        $this->clienteUpdateService->updateCliente($cliente, $clienteData, $tipoDoc, $clienteAlterado);
+
+        return redirect()->route('clientes.index')->with('success', 'Cliente <strong>' . $clienteNome . '</strong> atualizado com sucesso.');
     }
+
 
 }

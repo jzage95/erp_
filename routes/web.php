@@ -16,6 +16,6 @@ Route::get('/test-connection', function () {
 
 //Route::get('/', [ClienteController::class, 'index']); 
 Route::get('clientes', [ClienteController::class, 'index'])->name('clientes.index');
-Route::get('clientes/{id}/edit', [ClienteController::class, 'edit'])->name('clientes.edit');
-Route::put('clientes/{id}', [ClienteController::class, 'update'])->name('clientes.update');
+Route::get('clientes/{cliente}/edit', [ClienteController::class, 'edit'])->name('clientes.edit');
+Route::put('/clientes/{cliente}', [ClienteController::class, 'update'])->name('clientes.update');
 

@@ -87,38 +87,38 @@
                     <form id="editClientForm" method="POST" action="{{ route('clientes.update', $cliente->Cliente) }}">
                         @csrf
                         @method('PUT')
+
                         <!-- Campos do formulário de edição -->
                         <div class="form-group">
-                            <label for="Cliente">Cliente:</label>
-                            <input type="text" class="form-control" id="Cliente" name="Cliente" value="{{ old('Cliente', $cliente->Cliente) }}">
+                            <label for="Cliente">Cliente</label>
+                            <input type="text" class="form-control" id="Cliente" name="Cliente" value="" required>
                         </div>
                         <div class="form-group">
-                            <label for="Nome">Nome:</label>
-                            <input type="text" class="form-control" id="Nome" name="Nome" value="">
+                            <label for="Nome">Nome</label>
+                            <input type="text" class="form-control" id="Nome" name="Nome" value="" required>
                         </div>
                         <div class="form-group">
-                            <label for="Fac_Mor">Morada:</label>
-                            <input type="text" class="form-control" id="Fac_Mor" name="Fac_Mor" value="">
+                            <label for="Fac_Mor">Morada</label>
+                            <input type="text" class="form-control" id="Fac_Mor" name="Fac_Mor" value="" required>
                         </div>
                         <div class="form-group">
-                            <label for="NumContrib">Número de Contribuinte:</label>
-                            <input type="text" class="form-control" id="NumContrib" name="NumContrib" value="">
+                            <label for="NumContrib">Número de Contribuinte</label>
+                            <input type="text" class="form-control" id="NumContrib" name="NumContrib" value="" required>
                         </div>
                         <div class="form-group">
-                            <label for="Pais">País:</label>
-                            <input type="text" class="form-control" id="Pais" name="Pais" value="">
+                            <label for="Pais">País</label>
+                            <input type="text" class="form-control" id="Pais" name="Pais" value="" required>
                         </div>
                         <div class="form-group">
-                            <label for="NomeFiscal">Nome Fiscal:</label>
-                            <input type="text" class="form-control" id="NomeFiscal" name="NomeFiscal"
-                                value="">
+                            <label for="NomeFiscal">Nome Fiscal</label>
+                            <input type="text" class="form-control" id="NomeFiscal" name="NomeFiscal" value="" required>
                         </div>
                         <div class="form-group">
-                            <label for="tipoDoc">Tipo de Documento:</label>
-                            <select class="form-control" id="tipoDoc" name="tipoDoc">
-                                <option value="clinica" {{ request('tipoDoc') == 'clinica' ? 'selected' : '' }}> Faturas Clínica </option>
-                                <option value="comercial" {{ request('tipoDoc') == 'comercial' ? 'selected' : '' }}>Faturas Comercial </option>
-                                <option value="renda" {{ request('tipoDoc') == 'renda' ? 'selected' : '' }}>Faturas Renda de Casa </option>
+                            <label for="tipoDoc">Tipo de Documento</label>
+                            <select class="form-control" id="tipoDoc" name="tipoDoc" required>
+                                <option value="clinica">Faturas Clínica</option>
+                                <option value="comercial">Faturas Comercial</option>
+                                <option value="renda">Faturas Renda de Casa</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary mt-3">Actualizar</button>

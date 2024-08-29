@@ -8,89 +8,41 @@ use Carbon\Carbon;
 
 class ClienteUpdateService
 {
-    public function updateCliente($oldClienteId, $data, $tipoDoc, $clienteAlterado)
+    public function updateCliente($oldCliente, $data, $tipoDoc, $clienteAlterado)
     {
-        DB::transaction(function () use ($oldClienteId, $data, $tipoDoc, $clienteAlterado) {
+        DB::transaction(function () use ($oldCliente, $data, $tipoDoc, $clienteAlterado) {
             // Log para depuração
             Log::info('updateCliente chamado', [
-                'oldClienteId' => $oldClienteId,
+                'oldCliente' => $oldCliente,
                 'data' => $data,
                 'tipoDoc' => $tipoDoc,
                 'clienteAlterado' => $clienteAlterado,
             ]);
 
-            // Verifica se o ID do Cliente está correto
-            $cliente = DB::table('Clientes')->where('Cliente', $oldClienteId)->first();
-            if (!$cliente) {
-                throw new \Exception('Cliente não encontrado para o ID fornecido.');
-            }
-
             // Atualiza os dados do Cliente na tabela 'Clientes'
-            $updated = DB::table('Clientes')->where('Cliente', $oldClienteId)->update($data);
+            $updated = DB::table('Clientes')->where('Cliente', $oldCliente)->update($data);
 
             if (!$updated) {
                 throw new \Exception('Erro ao atualizar o cliente na tabela Clientes.');
             }
 
             // Atualiza a tabela CabecDoc com base nos dados atualizados
-            $this->updateCabecDoc($oldClienteId, $data, $tipoDoc, $clienteAlterado);
+            $this->updateCabecDoc($oldCliente, $data, $tipoDoc, $clienteAlterado);
 
             Log::info('Cliente e CabecDoc atualizados com sucesso.', ['clienteData' => $data]);
         });
     }
 
-    private function updateCabecDoc($oldClienteId, $data, $tipoDoc, $clienteAlterado)
+    private function updateCabecDoc($oldCliente, $data, $tipoDoc, $clienteAlterado)
     {
         // Verifique os tipos de documento que devem ser atualizados na tabela CabecDoc
-        $tiposDoc = $this->getTiposDocByTipoDoc($tipoDoc);
-
-        // Atualiza a tabela CabecDoc para cada tipo de documento associado ao Cliente
-        foreach ($tiposDoc as $doc) {
-            $query = DB::table('CabecDoc')
-                ->where('Entidade', $oldClienteId)
-                ->where('TipoDoc', $doc);
-
-            if ($clienteAlterado) {
-                // Se o Cliente foi alterado, atualize também o campo Entidade
-                $updated = $query->update([
-                    'Entidade' => $data['Cliente'],
-                    'NumContribuinte' => $data['NumContrib'],
-                    'Nome' => $data['Nome'],
-                    'Morada' => $data['Fac_Mor'],
-                    'PaisFac' => $data['Pais'],
-                    'NomeFac' => $data['NomeFiscal'],
-                    'NumContribuinteFac' => $data['NumContrib'],
-                    'EntidadeFac' => $data['Cliente'],
-                    'EntidadeEntrega' => $data['Cliente'],
-                    'EntidadeDescarga' => $data['Cliente'],
-                ]);
-            } else {
-                // Se o Cliente não foi alterado, atualize apenas os outros campos
-                $updated = $query->update([
-                    'NumContribuinte' => $data['NumContrib'],
-                    'Nome' => $data['Nome'],
-                    'Morada' => $data['Fac_Mor'],
-                    'PaisFac' => $data['Pais'],
-                    'NomeFac' => $data['NomeFiscal'],
-                    'NumContribuinteFac' => $data['NumContrib'],
-                ]);
-            }
-
-            if (!$updated) {
-                Log::warning("Nenhum registro foi atualizado na tabela CabecDoc para o TipoDoc {$doc}.");
-            } else {
-                Log::info("Registro atualizado com sucesso na tabela CabecDoc para o TipoDoc {$doc}.");
-            }
-        }
-    }
-
-    private function getTiposDocByTipoDoc($tipoDoc)
-    {
+        $tiposDoc = [];
         switch ($tipoDoc) {
             case 'clinica':
-                return ['VDC', 'FAC'];
+                $tiposDoc = ['VDC', 'FAC'];
+                break;
             case 'comercial':
-                return [
+                $tiposDoc = [
                     'FT',
                     'FT03',
                     'FT04',
@@ -106,11 +58,36 @@ class ClienteUpdateService
                     'NC15',
                     'NC17'
                 ];
+                break;
             case 'renda':
-                return ['FAR'];
+                $tiposDoc = ['FAR'];
+                break;
             default:
-                return []; // Caso padrão para evitar problemas
+                $tiposDoc = []; // Caso padrão para evitar problemas
+                break;
+        }
+
+        // Atualiza a tabela CabecDoc para cada tipo de documento associado ao Cliente
+        foreach ($tiposDoc as $doc) {
+            $updated = DB::table('CabecDoc')
+                ->where('Entidade', $oldCliente)
+                ->where('TipoDoc', $doc)
+                ->update([
+                    'Entidade' => $data['Cliente'],
+                    'NumContribuinte' => $data['NumContrib'],
+                    'Nome' => $data['Nome'],
+                    'Morada' => $data['Fac_Mor'],
+                    'PaisFac' => $data['Pais'],
+                    'NomeFac' => $data['NomeFiscal'],
+                    'NumContribuinteFac' => $data['NumContrib'],
+                    'EntidadeFac' => $data['Cliente'],
+                    'EntidadeEntrega' => $data['Cliente'],
+                    'EntidadeDescarga' => $data['Cliente'],
+                ]);
+
+            if (!$updated) {
+                Log::warning("Nenhum registro foi atualizado na tabela CabecDoc para o TipoDoc {$doc}.");
+            }
         }
     }
 }
-

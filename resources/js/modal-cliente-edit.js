@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function() {
     // Seleciona todos os botões de edição usando a classe "edit-btn"
     const editButtons = document.querySelectorAll(".edit-btn");
@@ -19,12 +18,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Função responsável por carregar os dados do cliente e preencher o modal
     function loadClientData(clientId) {
-        // Aqui você pode usar a API Fetch ou AJAX para fazer uma requisição ao servidor
-        // E obter os dados do cliente com base no "clientId"
+        // Faz uma requisição AJAX para buscar os dados do cliente
         fetch(`/clientes/${clientId}/edit`)
             .then(response => response.json())
             .then(data => {
-                // Preencher os campos do modal com os dados recebidos do servidor
+                // Preenche os campos do modal com os dados recebidos do servidor
                 document.getElementById("Cliente").value = data.Cliente;
                 document.getElementById("Nome").value = data.Nome;
                 document.getElementById("Fac_Mor").value = data.Fac_Mor;
@@ -33,10 +31,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById("NomeFiscal").value = data.NomeFiscal;
                 document.getElementById("tipoDoc").value = data.tipoDoc;
 
+                // Atualiza a URL de ação do formulário com base no ID do cliente
+                const form = document.getElementById("editClientForm");
+                form.action = `/clientes/${clientId}`;
+
                 // Exibe o modal
                 $('#editClientModal').modal('show');
             })
             .catch(error => console.error('Erro ao carregar os dados do cliente:', error));
     }
 });
-
