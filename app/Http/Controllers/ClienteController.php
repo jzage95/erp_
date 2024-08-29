@@ -45,7 +45,7 @@ class ClienteController extends Controller
         $cliente = DB::table('Clientes')->where('Cliente', $cliente)->first();
 
         if ($cliente) {
-            // Convertendo todos os campos do cliente para UTF-8
+            // Convertendo todos os campos do cliente para UTF-95
             array_walk_recursive($cliente, function (&$item) {
                 if (is_string($item) && mb_detect_encoding($item, 'UTF-8', true) === false) {
                     $item = mb_convert_encoding($item, 'UTF-8', 'auto');
